@@ -1,13 +1,11 @@
 package com.paulo.apipokedex.services;
 
-import com.paulo.apipokedex.mapper.UserResponseMapper;
 import com.paulo.apipokedex.model.User;
 import com.paulo.apipokedex.record.UserRecord;
 import com.paulo.apipokedex.repository.UserRepository;
 import com.paulo.apipokedex.record.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,13 +25,13 @@ public class UserServices {
 
     public List<UserResponse> getAllUser() {
        return this.userRepository.findAll()
-                .stream().map(UserResponseMapper::transformUserToUserResponse)
+                .stream().map(UserResponse::new)
                 .toList();
     }
 
     public Optional<UserResponse> getById(Long id) {
         return this.userRepository.findById(id)
-                .map(UserResponseMapper::transformUserToUserResponse);
+                .map(UserResponse::new);
     }
 
     public void registerUser(UserRecord userRecord) {

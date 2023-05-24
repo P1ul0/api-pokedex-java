@@ -19,5 +19,8 @@ public record UserResponse(
         @NotNull(message = "Campo Obrigátorio")
         List<Pokemon> pokemons
 ) {
+        public UserResponse (User user) {
+                this( user.getName(), user.getEmail(), user.getGender(), user.getPokemons());
+        }
 
 }
