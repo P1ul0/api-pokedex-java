@@ -35,18 +35,27 @@ public class UserServices {
     }
 
     public void registerUser(UserRecord userRecord) {
-
         userRepository.findByEmail(userRecord.email()).ifPresent(user -> {
             throw  new ResponseStatusException(HttpStatus.BAD_REQUEST,"\"message\": \"Usuário ja Existe\"");
         });
-        User user = new User();
+        userRepository.save(createUser(userRecord));
+    }
 
+    private void updateProperties(User user, UserRecord updateUser) {
+        UpdatePartial.updatePropererIfNotNull(user::setName, updateUser.name());
+        UpdatePartial.updatePropererIfNotNull(user::setEmail, updateUser.email());
+        UpdatePartial.updatePropererIfNotNull(user::setPassword, updateUser.password());
+        UpdatePartial.updatePropererIfNotNull(user::setGender, updateUser.gender());
+    }
+
+    private User createUser(UserRecord userRecord){
+        User user = new User();
 
         user.setEmail(userRecord.email());
         user.setName(userRecord.name());
         user.setPassword(encoder.encode(userRecord.password()));
         user.setGender(userRecord.gender());
 
-        userRepository.save(user);
+        return user;
     }
 }
